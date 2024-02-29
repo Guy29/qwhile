@@ -1,0 +1,67 @@
+quine read X {
+
+	tail_commands := [
+		  [@:=, 2, [@cons, [@var, 1], [@quote, nil]]]
+		, [@:=, 3, [@quote, nil]]
+		, [@:=, 4, [@quote, nil]]
+		, 
+			[ @while, [@var, 2]
+			, 
+				[ [@:=, 5, [@hd, [@var, 2]]]
+				, [@:=, 2, [@tl, [@var, 2]]]
+				, [@:=, 6, [@hd, [@var, 4]]]
+				, [@:=, 4, [@tl, [@var, 4]]]
+				, 
+					[ @if, [@var, 5]
+					, 
+						[ [@:=, 2, [@cons, [@hd, [@var, 5]], [@cons, [@tl, [@var, 5]], [@cons, [@quote, nil], [@var, 2]]]]]
+						, [@:=, 4, [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@cons, [@quote, nil], [@quote, nil]], [@var, 4]]]]]
+						]
+					, 
+						[ 
+							[ @if, [@var, 6]
+							, 
+								[ [@:=, 3, [@cons, [@cons, [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@quote, nil]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]], [@cons, [@hd, [@tl, [@var, 3]]], [@cons, [@hd, [@var, 3]], [@quote, nil]]]], [@tl, [@tl, [@var, 3]]]]]
+								]
+							, 
+								[ [@:=, 3, [@cons, [@cons, [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@quote, nil]]]]]]]]]]]]]]]]]]]], [@cons, [@quote, nil], [@quote, nil]]], [@var, 3]]]
+								]
+							]
+						]
+					]
+				]
+			]
+		, [@:=, 7, [@cons, [@cons, [@quote, nil], [@cons, [@quote, nil], [@quote, nil]]], [@cons, [@cons, [@quote, nil], [@quote, nil]], [@cons, [@hd, [@var, 3]], [@quote, nil]]]]]
+		, [@:=, 8, [@cons, [@quote, nil], [@cons, [@cons, [@var, 7], [@var, 1]], [@cons, [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@cons, [@quote, nil], [@quote, nil]]]]]]]]], [@quote, nil]]]]]
+	];
+	
+
+
+	raw_tail_commands := [tail_commands];
+	converted_tail_commands := [];
+	
+	cons_flags := [];
+	
+	while raw_tail_commands {
+		top := hd raw_tail_commands;
+		raw_tail_commands := tl raw_tail_commands;
+		cons_flag := hd cons_flags;
+		cons_flags := tl cons_flags;
+		if top {
+			raw_tail_commands := cons hd top cons tl top cons nil raw_tail_commands;
+			cons_flags := cons nil cons nil cons 1 cons_flags
+		} else {
+			if cons_flag {
+				converted_tail_commands := cons [@cons, hd tl converted_tail_commands, hd converted_tail_commands] tl tl converted_tail_commands
+			} else {
+				converted_tail_commands := cons [@quote, nil] converted_tail_commands
+			}
+		}
+	};
+	
+	
+	head_command := [@:=, 1, hd converted_tail_commands];
+	full_program := [0, cons head_command tail_commands, 8]
+	
+
+} write full_program
